@@ -94,6 +94,8 @@ def extract_info_from_judgment(judgment_text):
 
 def mark_judgment(judgment_text):
     global mark_judgment_info
+    if judgment_text == "":
+        return []
     info_dict = extract_info_from_judgment(judgment_text)
     mark_judgment_info = [[key, value] for key, value in info_dict.items()]
     return mark_judgment_info
@@ -118,7 +120,7 @@ def download_csv():
     return file_path
 
 def clear_input():
-    return ""
+    return "", []
 
 def read_docx(file):
     doc = Document(file.name)
@@ -167,7 +169,7 @@ def main():
 
         upload_file.change(fn=read_uploaded_file, inputs=upload_file, outputs=input_text)
         submit_btn.click(fn=mark_judgment, inputs=input_text, outputs=output_boxes)
-        clear_btn.click(fn=clear_input, outputs=input_text)
+        clear_btn.click(fn=clear_input, outputs=[input_text, output_boxes])
         download_btn.click(fn=download_csv, outputs=gr.File(label="CSV文件"))
 
         demo.launch()
