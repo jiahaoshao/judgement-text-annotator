@@ -137,7 +137,12 @@ def read_uploaded_file(file):
         connect = read_docx(file)
         return connect
     else:
-        return file.read().decode("utf-8")
+        try:
+            with open(file.name, 'r', encoding='utf-8') as f:
+                content = f.read()
+                return content
+        except UnicodeDecodeError as e:
+            return "读取文件时出现编码错误，请检查文件编码是否正确"
 
 def main():
     with gr.Blocks() as demo:
